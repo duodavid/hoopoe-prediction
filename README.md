@@ -74,7 +74,7 @@ To run the program your system needs the following requirements.
 
 
 ## Visualize
-The programm is created in close dependency using QGIS (https://www.qgis.org/de/site/). So to visualize everything you have to download the programm, create a new project and drag the "OpenStreetMap" layer on the left side
+The programm is created in close dependency using [QGIS](https://www.qgis.org/de/site/). So to visualize everything you have to download the programm, create a new project and drag the "OpenStreetMap" layer on the left side
 to your workbench, to display the world map. To visualize the data that are used in the program, drag the files to qgis. 
 
 (If the files are displayed incorrectly, make sure the project crs (german:kbs) is in the format WGS 84 EPSG:4326)
