@@ -1,0 +1,106 @@
+{
+  "globals": {
+    "steps": 1200,
+    "output": "csv",
+    "options": {
+      "delimiter": ";",
+      "format": "en-EN"
+    }
+  },
+  "layers": [
+    {
+      "name": "MyGridLayer",
+      "file": "Resources/sh_outline_8.asc"
+    },
+    {
+      "name": "ElevationLayer",
+      "file": "Resources/sh_dem_8.asc"
+    },
+    {
+      "name": "MeadowLayer",
+      "file": "Resources/sh_meadow_8.asc"
+    },
+    {
+      "name": "StreetLayer",
+      "file": "Resources/sh_street_8.asc"
+    }, 
+    {
+      "name": "TreeLayer",
+      "file": "Resources/sh_wood_8.asc"
+    },
+    {
+      "name": "TertiaryLayer",
+      "file": "Resources/sh_tertiary_8.asc"
+    },
+    {
+      "name": "LandscapeLayer",
+      "mappings": [
+        {
+          "name": "ResultFilePath",
+          "value": "C:\\Users\\David D\\Desktop\\Wiedehopf\\hoopoe_prediction\\HoopoePrediction\\HoopoePrediction\\Resources\\sh_results\\sh_result_8.asc"
+        },
+        {
+          "name": "AgentCount",
+          "value": 300
+        },
+        {
+          "name": "Startpoint",
+          "value": 0
+        },
+        {
+          "name": "RasterWidth",
+          "value": 35
+        },
+        {
+          "name": "RasterLength",
+          "value": 33
+        },
+        {
+          "name": "MinRasterSize",
+          "value": 17
+        },
+        {
+          "name": "PercentageTiles",
+          "value": 0.1
+        },
+        {
+          "name": "MinHeight",
+          "value": 0
+        },
+        {
+          "name": "MaxHeight",
+          "value": 50
+        },
+        {
+          "name": "TreeCount",
+          "value": 7
+        }
+        ]
+    }
+  ],
+  "agents": [
+    {
+      "name": "HoopoeAgent",
+      "file": "Resources/spawnpoints.csv",
+      "count": 100,
+      "mappings": [
+        {
+          "name": "PercentageTiles",
+          "value": 0.1
+        },
+        {
+          "name": "minHeight",
+          "value": 1
+        },
+        {
+          "name": "maxHeight",
+          "value": 50
+        },
+        {
+          "name": "TreeCount",
+          "value": 7
+        }
+      ]
+    }
+  ]
+}
