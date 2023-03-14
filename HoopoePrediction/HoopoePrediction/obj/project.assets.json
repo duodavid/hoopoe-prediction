@@ -7847,11 +7847,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\David D\\Desktop\\Wiedehopf\\hoopoe_prediction\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction.csproj",
+      "projectUniqueName": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction.csproj",
       "projectName": "HoopoePrediction",
-      "projectPath": "C:\\Users\\David D\\Desktop\\Wiedehopf\\hoopoe_prediction\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction.csproj",
+      "projectPath": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction.csproj",
       "packagesPath": "C:\\Users\\David D\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\David D\\Desktop\\Wiedehopf\\hoopoe_prediction\\HoopoePrediction\\HoopoePrediction\\obj\\",
+      "outputPath": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\David D\\AppData\\Roaming\\NuGet\\NuGet.Config",

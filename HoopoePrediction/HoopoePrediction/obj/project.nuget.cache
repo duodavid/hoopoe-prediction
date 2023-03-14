@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dfmSvEUIkmuiB9msROT5buFJmuGdYQnDfJjQ+v1Zq5NMV8QCufYv6r8XIiznzsAMwtGCrYiizmEyHh4kKD04jA==",
+  "dgSpecHash": "SfP4WLhHq88oOqQ0jsyH0OjmTgqAtWxfoXkjLD3u+qT1V2zr3hGuA8UzzHyJFTKqr/+YwQrwPsbHis9O9jzlJw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\David D\\Desktop\\Wiedehopf\\hoopoe_prediction\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction.csproj",
+  "projectFilePath": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\David D\\.nuget\\packages\\autofac\\6.3.0\\autofac.6.3.0.nupkg.sha512",
     "C:\\Users\\David D\\.nuget\\packages\\dnsclient\\1.6.0\\dnsclient.1.6.0.nupkg.sha512",

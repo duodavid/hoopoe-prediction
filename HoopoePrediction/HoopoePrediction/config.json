@@ -9,7 +9,7 @@
   },
   "layers": [
     {
-      "name": "MyGridLayer",
+      "name": "OutlineLayer",
       "file": "Resources/sh_outline_8.asc"
     },
     {
@@ -37,7 +37,7 @@
       "mappings": [
         {
           "name": "ResultFilePath",
-          "value": "C:\\Users\\David D\\Desktop\\Wiedehopf\\hoopoe_prediction\\HoopoePrediction\\HoopoePrediction\\Resources\\sh_results\\sh_result_8.asc"
+          "value": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\Resources\\sh_results\\sh_result_8.asc"
         },
         {
           "name": "AgentCount",

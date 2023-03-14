@@ -22,7 +22,7 @@ namespace HoopoePrediction
             // Create a new model description that holds all parts of the model, here: one agent type and one layer
             var description = new ModelDescription();
             description.AddLayer<MeadowLayer>(); // Layer representing meadow
-            description.AddLayer<MyGridLayer>(); // we'll use a simple grid layer here
+            description.AddLayer<OutlineLayer>(); // we'll use a simple grid layer here
             description.AddLayer<ElevationLayer>(); // Layer representing the elevation
             description.AddLayer<StreetLayer>();
             description.AddLayer<TreeLayer>();

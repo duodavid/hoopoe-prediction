@@ -16,7 +16,7 @@ namespace HoopoePrediction.Model
     /// <summary>
     ///     A simple raster layer that provides access to the values of a raster input.
     /// </summary>
-    public class MyGridLayer : RasterLayer
+    public class OutlineLayer : RasterLayer
     {
 
         public bool IsPointInside(Position coordinate)

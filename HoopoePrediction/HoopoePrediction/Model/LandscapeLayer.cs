@@ -210,23 +210,23 @@ namespace HoopoePrediction.Model
 
         private List<HoopoeAgent> Hoopoes { get; set; }
         
-        [PropertyDescription(Name = "MyGridLayer")]
-        public MyGridLayer Fence { get; set; }
+        [PropertyDescription(Name = "OutlineLayer")]
+        public OutlineLayer Fence { get; set; }
         
         [PropertyDescription(Name = "ElevationLayer")]
         public ElevationLayer Elevation { get; set; }
         
         [PropertyDescription(Name = "MeadowLayer")]
-        private MeadowLayer Meadow { get; set; }
+        public MeadowLayer Meadow { get; set; }
         
         [PropertyDescription(Name = "StreetLayer")]
-        private StreetLayer Street { get; set; }
+        public StreetLayer Street { get; set; }
         
         [PropertyDescription(Name = "TreeLayer")]
-        private TreeLayer Trees { get; set; }
+        public TreeLayer Trees { get; set; }
         
         [PropertyDescription(Name = "TertiaryLayer")]
-        private TertiaryLayer Tertiary { get; set; }
+        public TertiaryLayer Tertiary { get; set; }
         
         [PropertyDescription(Name = "ResultFilePath")] public String ResultFilePath { get; set; }
         

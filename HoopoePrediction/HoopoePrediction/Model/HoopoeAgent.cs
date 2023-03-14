@@ -34,7 +34,6 @@ namespace HoopoePrediction.Model
         [PropertyDescription(Name = "gender")] public string Gender { get; set; }
         [PropertyDescription(Name = "xWidth")] public int XWidth { get; set; }
         [PropertyDescription(Name = "yLength")] public int YLength { get; set; }
-        [PropertyDescription(Name = "yLength")] public String ResultFilePath { get; set; }
         [PropertyDescription(Name = "PercentageTiles")] public double PercentageTiles { get; set; }
         [PropertyDescription(Name = "minHeight")] public int MinHeight { get; set; }
         [PropertyDescription(Name = "maxHeight")] public int MaxHeight { get; set; }

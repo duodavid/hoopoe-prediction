@@ -10,7 +10,7 @@ namespace HoopoePrediction.Items
 
     public abstract class Block : IObstacle
     {
-        public Block(MyGridLayer layer)
+        public Block(OutlineLayer layer)
         {
             Battleground = layer;
         }
@@ -19,7 +19,7 @@ namespace HoopoePrediction.Items
         {
         }
 
-        protected MyGridLayer Battleground { get; }
+        protected OutlineLayer Battleground { get; }
 
         //Gewichtung des Objekts
         public long ScoreValue { get; set; }
