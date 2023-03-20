@@ -219,7 +219,7 @@ namespace HoopoePrediction.Model
             // {
             //     //Do nothing
             // }
-            if (Position.X+1<XSpawn+XWidth)
+            if (Position.X+1<XSpawn+XWidth && IsWithinFence(Position))
             {
                 Layer.Environment.MoveTo(this, Position.CreatePosition(Position.X+1,Position.Y), 1);
             }
@@ -232,7 +232,11 @@ namespace HoopoePrediction.Model
                 
             }
         }
-        
+
+        private bool IsWithinFence(Position pos)
+        {
+            return Layer.Fence.IsPointInside(pos);
+        }
   
         
     }
