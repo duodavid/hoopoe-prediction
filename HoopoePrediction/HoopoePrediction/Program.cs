@@ -27,7 +27,10 @@ namespace HoopoePrediction
             description.AddLayer<StreetLayer>();
             description.AddLayer<TreeLayer>();
             description.AddLayer<TertiaryLayer>();
+            description.AddLayer<ApplicableLayer>();
+            description.AddLayer<WeatherLayer>();
             description.AddLayer<LandscapeLayer>();
+            
 
             description.AddAgent<HoopoeAgent, LandscapeLayer>(); // the agent type will be located at the grid layer
 
@@ -44,7 +47,8 @@ namespace HoopoePrediction
 
             // Layer
             var layer = (LandscapeLayer) loopResults.Model.Layers.Values.Last();
-            UpdateStats(layer.Results, layer.ResultFilePath);
+            Console.WriteLine($"Simulation execution finished with {layer.SuccessRate} successful agents");
+            //UpdateStats(layer.Results, layer.ResultFilePath);
 
 
             // Feedback to user that simulation run was successful

@@ -92,6 +92,8 @@ namespace HoopoePrediction.Model
 
             //var t= Layer.GetCurrentTick();
 
+            
+            
             //ToDo: tree Amount
             if (Math.Abs(Position.Y - (YSpawn+YLength-1)) == 0 && Math.Abs(Position.X - (XSpawn+XWidth-1)) ==0 ) 
             {
@@ -100,6 +102,7 @@ namespace HoopoePrediction.Model
                     Console.WriteLine("Enough food Supply for" + " Hoopoe " + MemberId+" "+ foodspots.Count);
                     updated = true;
                     Layer.Results.Add(foodspots);
+                    Layer.SuccessRate++;
                     //updateStats();
 
                 }

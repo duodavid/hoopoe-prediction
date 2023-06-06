@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using HoopoePrediction.Items;
 using Mars.Components.Environments;
 using Mars.Components.Layers;
@@ -31,49 +33,61 @@ namespace HoopoePrediction.Model
             UnregisterAgent unregisterAgentHandle)
         {
             base.InitLayer(layerInitData, registerAgentHandle, unregisterAgentHandle);
-            
+
+            var nr = "2.4";
+            var s = double.Parse(nr, System.Globalization.CultureInfo.InvariantCulture);
+            Weather.ReadWeatherData(WeatherDataPath, 8);
+            var temp = Weather.GetTemperature(0, 3);
             // var agentManager = layerInitData.Container.Resolve<IAgentManager>();
             // Hoopoes = agentManager.Spawn<HoopoeAgent, LandscapeLayer>().ToList();
             var layer = this;
             Environment = new SpatialHashEnvironment<Objective>(Fence.Width, Fence.Height);
-
             Hoopoes = new List<HoopoeAgent>();
-            var spawnpoints = CreateSpawnpoint(RasterWidth, RasterLength, Fence.Width, Fence.Height, MinRasterSize,
-                Startpoint, AgentCount);
+            ApplicableSpots = new List<Position>();
+            Rasterspots = new List<Position>();
+            MinAmountSpots = RasterLength * RasterWidth * PercentageTiles;
+            // SelectApplicable();
+            // PrintSpots(ApplicableSpots, ApplicableSpotsPath);
+            var startpoints = Cluster2();
+            Console.WriteLine("Potential Habitats " +startpoints.Count);
+            PrintSpots(Rasterspots,ClusterspotsPath);
             
-            for (int i = 0; i < AgentCount; i++)
-            {
-                var spawn = spawnpoints[i];
-                var agent = new HoopoeAgent();
-                agent.MemberId = spawn[0];
-                agent.XSpawn = spawn[1];
-                agent.YSpawn = spawn[2];
-                agent.XWidth = spawn[3];
-                agent.YLength = spawn[4];
-                agent.MinHeight = MinHeight;
-                agent.MaxHeight = MaxHeight;
-                agent.PercentageTiles = PercentageTiles;
-                agent.TreeCount = TreeCount;
-                agent.Init(layer);
-                registerAgentHandle.Invoke(layer,agent);
-                Hoopoes.Add(agent);
-            }
-            
-            Results = new List<List<Position>>();
-            
-            for (var x = 0; x < Fence.Width; x++)
-            for (var y = 0; y < Fence.Height; y++)
-            {
-                var enable = Meadow[x, y];
-                var position = Position.CreatePosition(x, y);
-                CreateEntity(enable, position, LandscapeType.Grass);
-                enable = Trees[x, y];
-                CreateEntity(enable, position, LandscapeType.Tree);
-                enable = Street[x, y];
-                CreateEntity(enable, position, LandscapeType.Street);
-                enable = Tertiary[x, y];
-                CreateEntity(enable, position, LandscapeType.Street);
-            }
+            // var spawnpoints = CreateSpawnpoint(RasterWidth, RasterLength, Fence.Width, Fence.Height, MinRasterSize,
+            //     Startpoint, AgentCount);
+            //
+            // for (int i = 0; i < AgentCount; i++)
+            // {
+            //     var spawn = spawnpoints[i];
+            //     var agent = new HoopoeAgent();
+            //     agent.MemberId = spawn[0];
+            //     agent.XSpawn = spawn[1];
+            //     agent.YSpawn = spawn[2];
+            //     agent.XWidth = spawn[3];
+            //     agent.YLength = spawn[4];
+            //     agent.MinHeight = MinHeight;
+            //     agent.MaxHeight = MaxHeight;
+            //     agent.PercentageTiles = PercentageTiles;
+            //     agent.TreeCount = TreeCount;
+            //     agent.Init(layer);
+            //     registerAgentHandle.Invoke(layer,agent);
+            //     Hoopoes.Add(agent);
+            // }
+            //
+            // Results = new List<List<Position>>();
+            //
+            // for (var x = 0; x < Fence.Width; x++)
+            // for (var y = 0; y < Fence.Height; y++)
+            // {
+            //     var enable = Meadow[x, y];
+            //     var position = Position.CreatePosition(x, y);
+            //     CreateEntity(enable, position, LandscapeType.Grass);
+            //     enable = Trees[x, y];
+            //     CreateEntity(enable, position, LandscapeType.Tree);
+            //     enable = Street[x, y];
+            //     CreateEntity(enable, position, LandscapeType.Street);
+            //     enable = Tertiary[x, y];
+            //     CreateEntity(enable, position, LandscapeType.Street);
+            // }
 
             return Hoopoes.Count > 0;
         }
@@ -109,8 +123,6 @@ namespace HoopoePrediction.Model
                 }
 
             }
-           
-        
         }
         
         /// <summary>
@@ -128,6 +140,7 @@ namespace HoopoePrediction.Model
         private List<int[]> CreateSpawnpoint(int rasterWidth , int rasterLength, int fileWidth, int fileLength, int minFieldCovered, int startpoint, int agentCount)
         {
             var list = new List<int[]>();
+            SuccessRate = 0;
             var count = 0;
             var maxAgents = 2000; //maximale Anzahl an Agenten
             var MinFields = minFieldCovered; //mindest Anzahl an Feldern, die es braucht um in Betracht gezogen zu werden
@@ -206,6 +219,242 @@ namespace HoopoePrediction.Model
         }
         
         
+        private void SelectApplicable()
+        {
+            var height = Fence.Height ;
+            var width = Fence.Width ;
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    var pos = Position.CreatePosition(j, i);
+                    if (checkElevation(pos))
+                    {
+                        if (Meadow.GetValue(pos)==0)
+                        {
+                            if (Street.GetValue(pos) != 0 && Tertiary.GetValue(pos)!=0)
+                            {
+                                ApplicableSpots.Add(pos);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private List<Position> Cluster()
+        {
+            var rasterStartpointX = 0;
+            var rasterStartpointY = 0;
+            var tempList = new List<Position>();
+            var usedPositions = new List<Position>();
+            var startpoints = new List<Position>();
+            var rasterEndpointX = RasterWidth;
+            var rasterEndpointY = RasterLength;
+
+            for (int y = 0; y < Fence.Height; y++)
+            {
+                rasterStartpointY = y;
+                for (int x = 0; x < Fence.Width; x++) //while x<Fence.Width
+                {
+                    rasterStartpointX = x;
+                    rasterEndpointX = x+RasterWidth;
+                    foreach (var spot in ApplicableSpots)
+                    {
+                        if (!(spot.X >= rasterStartpointX) || !(spot.X <= rasterEndpointX)) continue;
+                        if (!(spot.Y >= rasterStartpointY) || !(spot.Y <= rasterEndpointY)) continue;
+                        if (!usedPositions.Contains(spot))
+                        {
+                            tempList.Add(spot);
+                        }
+                    }
+
+                    if (tempList.Count>= MinAmountSpots)
+                    {
+                        startpoints.Add(Position.CreatePosition(rasterStartpointX, rasterStartpointY));
+                        
+                        foreach (var pos in tempList)
+                        {
+                            Rasterspots.Add(pos);
+                            usedPositions.Add(pos);
+                        }
+                        if (x+RasterWidth<Fence.Width)
+                        {
+                            x += RasterWidth;
+                            //rasterEndpointX += RasterWidth;
+                        }
+                    }
+                    else
+                    {
+                        ++rasterEndpointX;
+                    }
+                    tempList.Clear();
+                }
+                ++rasterEndpointY;
+                if (rasterEndpointY>Fence.Height)
+                {
+                    break;
+                }
+            }
+
+            return startpoints;
+        }
+
+        private List<Position> Cluster2()
+        {  var rasterStartpointX = 0;
+            var rasterStartpointY = 0;
+            var tempList = new List<Position>();
+            var streetTileList = new List<Position>();
+            var treeList = new List<Position>();
+            var usedPositions = new List<Position>();
+            var startpoints = new List<Position>();
+            var rasterEndpointX = RasterWidth;
+            var rasterEndpointY = RasterLength;
+
+            for (int y = 0; y < Fence.Height; y+=RasterLength)
+            {
+                rasterStartpointY = y;
+                for (int x = 0; x < Fence.Width; x++) //while x<Fence.Width
+                {
+                    rasterStartpointX = x;
+                    rasterEndpointX = x + RasterWidth;
+                    for (int i = y; i < rasterEndpointY-1; i++)
+                    {
+                        for (int j = x; j < rasterEndpointX-1; j++)
+                        {
+                            var pos = Position.CreatePosition(j, i);
+                            if (j < Fence.Width)
+                            {
+                                if (Math.Abs(Applicable.GetValue(pos) - 7) < 1 && !usedPositions.Contains(pos))
+                                {
+                                    tempList.Add(pos);
+                                }
+                                else if (Street.GetValue(pos) == 0 && Tertiary.GetValue(pos)==0)
+                                {
+                                    streetTileList.Add(pos);
+                                }
+                                else if (Trees.GetValue(pos) == 0)
+                                {
+                                    treeList.Add(pos);
+                                }
+                            }
+                            
+                        }
+                    }
+
+                    if (tempList.Count>= MinAmountSpots)
+                    {
+                        if (tempList.Count>= streetTileList.Count && treeList.Count>= TreeCount)
+                        {
+                            startpoints.Add(Position.CreatePosition(rasterStartpointX, rasterStartpointY));
+                        
+                            foreach (var pos in tempList)
+                            {
+                                Rasterspots.Add(pos);
+                                usedPositions.Add(pos);
+                            }
+
+                            foreach (var pos in treeList)
+                            {
+                                usedPositions.Add(pos);
+                            }
+                            
+                            if (x+RasterWidth<Fence.Width)
+                            {
+                                x += RasterWidth;
+                                //rasterEndpointX += RasterWidth;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ++rasterEndpointX;
+                    }
+                    tempList.Clear();
+                    streetTileList.Clear();
+                    usedPositions.Clear();
+                }
+                rasterEndpointY+=RasterLength;
+                if (rasterEndpointY>Fence.Height)
+                {
+                    break;
+                }
+            }
+
+            return startpoints;
+        }
+
+
+        private bool checkElevation(Position pos)
+        {
+            var currentHeight = Elevation.GetHeight(pos);
+            if (currentHeight>=MinHeight && currentHeight<=MaxHeight)
+            {
+                return true;
+            }
+            return false;
+        }
+        
+        private static void PrintSpots(List<Position> list, String filepath)
+        {
+            if (list.Count < 1)
+            {
+                return;
+            }
+            
+            string[] arrLine = File.ReadAllLines(filepath);
+            int maxColumns = arrLine.Length;
+            int startIndex = maxColumns; // 511 - 503 + 1 = 7 || 90 - 83 +1 = 6
+            int count = 0;
+            int spotsIdx = 0;
+
+
+            //90 -82 -= 7 || 90 -0 = 90 -1idx =  89
+            foreach (var spot in list)
+            {
+                startIndex = (int) (startIndex - spot.Y - 1);
+                var line = arrLine[startIndex];
+                var arr = new StringBuilder(line);
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    if (arr[i] == '0')
+                    {
+                        arr[i] = '1';
+                        ++count;
+                    }
+                    else if (arr[i] == '1' || arr[i] == '7')
+                    {
+                        ++count;
+                    }
+                    if (Math.Abs(count - spot.X) < 1)
+                    { 
+                        // val pos = next value | if no value left -> break;
+                        // //pos.X = -1;
+                        arr[i] = '7';
+                        count = 0;
+                        break;
+                    }
+                }
+                arrLine[startIndex] = arr.ToString();
+                startIndex = maxColumns;
+            }
+
+
+            for (int numTries = 0; numTries < 10; numTries++)
+            {
+                try
+                {
+                    File.WriteAllLines(filepath, arrLine);
+                    //Console.WriteLine("Success");
+                    break;
+                }
+                catch (IOException)
+                {
+                    //Console.WriteLine("sleep");
+                }
+            }
+        }
+        
         #region Properties and Fields
 
         private List<HoopoeAgent> Hoopoes { get; set; }
@@ -228,7 +477,19 @@ namespace HoopoePrediction.Model
         [PropertyDescription(Name = "TertiaryLayer")]
         public TertiaryLayer Tertiary { get; set; }
         
+        [PropertyDescription(Name = "ApplicableLayer")]
+        public ApplicableLayer Applicable { get; set; }
+        
+        [PropertyDescription(Name = "WeatherLayer")]
+        public WeatherLayer Weather { get; set; }
+        
         [PropertyDescription(Name = "ResultFilePath")] public String ResultFilePath { get; set; }
+        
+        [PropertyDescription(Name = "ApplicableSpotsPath")] public String ApplicableSpotsPath { get; set; }
+        
+        [PropertyDescription(Name = "ClusterspotsPath")] public String ClusterspotsPath { get; set; }
+
+        [PropertyDescription(Name = "WeatherDataPath")] public String WeatherDataPath { get; set; }
         
         [PropertyDescription(Name = "AgentCount")] public int AgentCount { get; set; }
         
@@ -251,6 +512,14 @@ namespace HoopoePrediction.Model
         public SpatialHashEnvironment<Objective> Environment { get; set; }
 
         public List<List<Position>> Results;
+        
+        public List<Position> ApplicableSpots;
+
+        public double MinAmountSpots;
+
+        public List<Position> Rasterspots;
+
+        public int SuccessRate;
 
         public enum LandscapeType
         {

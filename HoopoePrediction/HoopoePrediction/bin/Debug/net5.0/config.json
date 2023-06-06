@@ -1,6 +1,6 @@
 {
   "globals": {
-    "steps": 1200,
+    "steps": 10,
     "output": "csv",
     "options": {
       "delimiter": ";",
@@ -9,35 +9,51 @@
   },
   "layers": [
     {
-      "name": "OutlineLayer",
-      "file": "Resources/sh_outline_8.asc"
-    },
-    {
       "name": "ElevationLayer",
-      "file": "Resources/sh_dem_8.asc"
+      "file": "Resources/sh_dem_1.asc"
     },
     {
       "name": "MeadowLayer",
-      "file": "Resources/sh_meadow_8.asc"
+      "file": "Resources/sh_meadow_1.asc"
     },
     {
       "name": "StreetLayer",
-      "file": "Resources/sh_street_8.asc"
+      "file": "Resources/sh_street_1.asc"
     }, 
     {
       "name": "TreeLayer",
-      "file": "Resources/sh_wood_8.asc"
+      "file": "Resources/sh_wood_1.asc"
     },
     {
       "name": "TertiaryLayer",
-      "file": "Resources/sh_tertiary_8.asc"
+      "file": "Resources/sh_tertiary_1.asc"
+    },
+    {
+      "name": "OutlineLayer",
+      "file": "Resources/sh_outline_1.asc"
+    },
+    {
+      "name": "ApplicableLayer",
+      "file": "Resources/sh_applicable_1.asc"
+    },
+    {
+      "name": "WeatherLayer",
+      "file": "Resources/sh_applicable_1.asc"
     },
     {
       "name": "LandscapeLayer",
       "mappings": [
         {
           "name": "ResultFilePath",
-          "value": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\Resources\\sh_results\\sh_result_8.asc"
+          "value": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\Resources\\SH_results\\SH_result_1.asc"
+        },
+        {
+          "name": "ApplicableSpotsPath",
+          "value": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\Resources\\sh_applicableSpots\\sh_applicable_1.asc"
+        },
+        {
+          "name": "ClusterspotsPath",
+          "value": "C:\\Users\\David D\\Desktop\\Wiedehopf\\HoopoePrediction\\HoopoePrediction\\HoopoePrediction\\Resources\\sh_clusterspots\\sh_meadow_1.asc"
         },
         {
           "name": "AgentCount",
@@ -49,11 +65,11 @@
         },
         {
           "name": "RasterWidth",
-          "value": 35
+          "value": 68
         },
         {
           "name": "RasterLength",
-          "value": 33
+          "value": 46
         },
         {
           "name": "MinRasterSize",
@@ -69,13 +85,38 @@
         },
         {
           "name": "MaxHeight",
-          "value": 50
+          "value": 55
         },
         {
           "name": "TreeCount",
           "value": 7
         }
         ]
+    }
+  ],
+  "agents": [
+    {
+      "name": "HoopoeAgent",
+      "file": "Resources/spawnpoints.csv",
+      "count": 100,
+      "mappings": [
+        {
+          "name": "PercentageTiles",
+          "value": 0.1
+        },
+        {
+          "name": "minHeight",
+          "value": 1
+        },
+        {
+          "name": "maxHeight",
+          "value": 50
+        },
+        {
+          "name": "TreeCount",
+          "value": 7
+        }
+      ]
     }
   ]
 }
