@@ -451,17 +451,6 @@ C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePredi
 C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\sh_applicable_6.asc
 C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\sh_applicable_7.asc
 C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\sh_applicable_8.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_0.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_1.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_10.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_2.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_3.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_4.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_5.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_6.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_7.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_8.asc
-C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\mv_applicable_9.asc
 C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\sh_dem_0.asc
 C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\sh_dem_1.asc
 C:\Users\David D\Desktop\Wiedehopf\HoopoePrediction\HoopoePrediction\HoopoePrediction\bin\Debug\net5.0\Resources\sh_dem_2.asc

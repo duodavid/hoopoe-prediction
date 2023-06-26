@@ -46,55 +46,51 @@ namespace HoopoePrediction.Model
             ApplicableSpots = new List<Position>();
             Rasterspots = new List<Position>();
             MinAmountSpots = RasterLength * RasterWidth * PercentageTiles;
-            // SelectApplicable();
-            // PrintSpots(ApplicableSpots, ApplicableSpotsPath);
-            var startpoints = Cluster2();
-            Console.WriteLine("Potential Habitats " +startpoints.Count);
+            SelectApplicable();
+            PrintSpots(ApplicableSpots, ApplicableSpotsPath);
+            var spawnpoints = Cluster();
+            Console.WriteLine("Potential Habitats " +spawnpoints.Count);
             PrintSpots(Rasterspots,ClusterspotsPath);
             
-            // var spawnpoints = CreateSpawnpoint(RasterWidth, RasterLength, Fence.Width, Fence.Height, MinRasterSize,
-            //     Startpoint, AgentCount);
-            //
-            // for (int i = 0; i < AgentCount; i++)
-            // {
-            //     var spawn = spawnpoints[i];
-            //     var agent = new HoopoeAgent();
-            //     agent.MemberId = spawn[0];
-            //     agent.XSpawn = spawn[1];
-            //     agent.YSpawn = spawn[2];
-            //     agent.XWidth = spawn[3];
-            //     agent.YLength = spawn[4];
-            //     agent.MinHeight = MinHeight;
-            //     agent.MaxHeight = MaxHeight;
-            //     agent.PercentageTiles = PercentageTiles;
-            //     agent.TreeCount = TreeCount;
-            //     agent.Init(layer);
-            //     registerAgentHandle.Invoke(layer,agent);
-            //     Hoopoes.Add(agent);
-            // }
-            //
-            // Results = new List<List<Position>>();
-            //
-            // for (var x = 0; x < Fence.Width; x++)
-            // for (var y = 0; y < Fence.Height; y++)
-            // {
-            //     var enable = Meadow[x, y];
-            //     var position = Position.CreatePosition(x, y);
-            //     CreateEntity(enable, position, LandscapeType.Grass);
-            //     enable = Trees[x, y];
-            //     CreateEntity(enable, position, LandscapeType.Tree);
-            //     enable = Street[x, y];
-            //     CreateEntity(enable, position, LandscapeType.Street);
-            //     enable = Tertiary[x, y];
-            //     CreateEntity(enable, position, LandscapeType.Street);
-            // }
+
+            for (int i = Startpoint; i < spawnpoints.Count; i++)
+            {
+                var spawn = Rasterspots[i];
+                var agent = new HoopoeAgent();
+                agent.MemberId = 0;
+                agent.XSpawn = (int) spawn.X;
+                agent.YSpawn = (int) spawn.Y;
+                agent.XWidth = RasterWidth;
+                agent.YLength = RasterLength;
+                agent.MinHeight = MinHeight;
+                agent.MaxHeight = MaxHeight;
+                agent.PercentageTiles = PercentageTiles;
+                agent.Init(layer);
+                registerAgentHandle.Invoke(layer,agent);
+                Hoopoes.Add(agent);
+            }
+            
+            Results = new List<List<Position>>();
+            
+            for (var x = 0; x < Fence.Width; x++)
+            for (var y = 0; y < Fence.Height; y++)
+            {
+                var enable = Meadow[x, y];
+                var position = Position.CreatePosition(x, y);
+                CreateEntity(enable, position, LandscapeType.Grass);
+                enable = Trees[x, y];
+                CreateEntity(enable, position, LandscapeType.Tree);
+                enable = Street[x, y];
+                CreateEntity(enable, position, LandscapeType.Street);
+                enable = Tertiary[x, y];
+                CreateEntity(enable, position, LandscapeType.Street);
+            }
 
             return Hoopoes.Count > 0;
         }
 
         private void CreateEntity(double enable, Position position, LandscapeType type)
         {
-            
             if (enable == 0)
             {
                 if (type == LandscapeType.Grass)
@@ -125,99 +121,6 @@ namespace HoopoePrediction.Model
             }
         }
         
-        /// <summary>
-        /// Creates spawnpoints for given amount of agents and sets a raster size for them. Rastersize
-        /// depend on given parameter but can be smaller given the filesize aswell as the minFieldCovered
-        /// </summary>
-        /// <param name="rasterWidth">width of raster</param>
-        /// <param name="rasterLength">length of raster</param>
-        /// <param name="fileWidth">width of file</param>
-        /// <param name="fileLength">length of file</param>
-        /// <param name="minFieldCovered">mininum length of raster dimension to be considered eligble</param>
-        /// <param name="startpoint">startpoint</param>
-        /// <param name="agentCount">amount of agents spanpoints to create</param>
-        /// <returns></returns>
-        private List<int[]> CreateSpawnpoint(int rasterWidth , int rasterLength, int fileWidth, int fileLength, int minFieldCovered, int startpoint, int agentCount)
-        {
-            var list = new List<int[]>();
-            SuccessRate = 0;
-            var count = 0;
-            var maxAgents = 2000; //maximale Anzahl an Agenten
-            var MinFields = minFieldCovered; //mindest Anzahl an Feldern, die es braucht um in Betracht gezogen zu werden
-            //var id = 0;
-            var xspawn = 0;
-            var yspawn = 0;
-            var gender = "m";
-            var width = rasterWidth; //Breite des Rasters
-            var length = rasterLength; //LÄnge des Rasters
-            var maxWidth = fileWidth;
-            var maxLength = fileLength;
-            var temp = width;
-            var currentWidth = 0;
-            var currentLength = 0;
-
-            
-            for (int id = 0; id < maxAgents; id++)
-            {
-                //Console.WriteLine(id+","+xspawn+","+yspawn+","+gender+","+width+","+length);
-                
-                //list.Add(id+","+xspawn+","+yspawn+","+gender+","+width+","+length);
-
-                if (count==agentCount)
-                {
-                    break;
-                }
-                if (id>=startpoint)
-                {
-                    var arr = new int[5];
-                    arr[0] = id;
-                    arr[1] = xspawn;
-                    arr[2] = yspawn;
-                    arr[3] = width;
-                    arr[4] = length;
-                    list.Add(arr);
-                    count++;
-                }
-                
-                   
-                if (width!=temp)
-                {
-                    width = temp;
-                }
-
-                currentWidth = maxWidth - (width + xspawn);
-                
-                if (currentWidth >= MinFields)
-                {
-                    xspawn += width;
-                    if (currentWidth < width)
-                    {
-                        width = maxWidth - xspawn; //maxWidth - (width + xspawn);
-                    }
-                    
-                }
-                else
-                {
-                    currentLength = maxLength - (length+yspawn);
-                    if (currentLength >= MinFields)
-                    {
-                        xspawn = 0;
-                        yspawn += length;
-                        if (currentLength < length)
-                        {
-                            length = currentLength;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return list;
-        }
-        
         
         private void SelectApplicable()
         {
@@ -241,66 +144,9 @@ namespace HoopoePrediction.Model
                 }
             }
         }
+        
 
         private List<Position> Cluster()
-        {
-            var rasterStartpointX = 0;
-            var rasterStartpointY = 0;
-            var tempList = new List<Position>();
-            var usedPositions = new List<Position>();
-            var startpoints = new List<Position>();
-            var rasterEndpointX = RasterWidth;
-            var rasterEndpointY = RasterLength;
-
-            for (int y = 0; y < Fence.Height; y++)
-            {
-                rasterStartpointY = y;
-                for (int x = 0; x < Fence.Width; x++) //while x<Fence.Width
-                {
-                    rasterStartpointX = x;
-                    rasterEndpointX = x+RasterWidth;
-                    foreach (var spot in ApplicableSpots)
-                    {
-                        if (!(spot.X >= rasterStartpointX) || !(spot.X <= rasterEndpointX)) continue;
-                        if (!(spot.Y >= rasterStartpointY) || !(spot.Y <= rasterEndpointY)) continue;
-                        if (!usedPositions.Contains(spot))
-                        {
-                            tempList.Add(spot);
-                        }
-                    }
-
-                    if (tempList.Count>= MinAmountSpots)
-                    {
-                        startpoints.Add(Position.CreatePosition(rasterStartpointX, rasterStartpointY));
-                        
-                        foreach (var pos in tempList)
-                        {
-                            Rasterspots.Add(pos);
-                            usedPositions.Add(pos);
-                        }
-                        if (x+RasterWidth<Fence.Width)
-                        {
-                            x += RasterWidth;
-                            //rasterEndpointX += RasterWidth;
-                        }
-                    }
-                    else
-                    {
-                        ++rasterEndpointX;
-                    }
-                    tempList.Clear();
-                }
-                ++rasterEndpointY;
-                if (rasterEndpointY>Fence.Height)
-                {
-                    break;
-                }
-            }
-
-            return startpoints;
-        }
-
-        private List<Position> Cluster2()
         {  var rasterStartpointX = 0;
             var rasterStartpointY = 0;
             var tempList = new List<Position>();
@@ -401,8 +247,9 @@ namespace HoopoePrediction.Model
             {
                 return;
             }
-            
-            string[] arrLine = File.ReadAllLines(filepath);
+            var fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\" +
+                                                     filepath));
+            string[] arrLine = File.ReadAllLines(fullPath);
             int maxColumns = arrLine.Length;
             int startIndex = maxColumns; // 511 - 503 + 1 = 7 || 90 - 83 +1 = 6
             int count = 0;
@@ -440,19 +287,19 @@ namespace HoopoePrediction.Model
             }
 
 
-            for (int numTries = 0; numTries < 10; numTries++)
-            {
-                try
-                {
-                    File.WriteAllLines(filepath, arrLine);
-                    //Console.WriteLine("Success");
-                    break;
-                }
-                catch (IOException)
-                {
-                    //Console.WriteLine("sleep");
-                }
-            }
+            // for (int numTries = 0; numTries < 10; numTries++)
+            // {
+            //     try
+            //     {
+            //         File.WriteAllLines(filepath, arrLine);
+            //         //Console.WriteLine("Success");
+            //         break;
+            //     }
+            //     catch (IOException)
+            //     {
+            //         //Console.WriteLine("sleep");
+            //     }
+            // }
         }
         
         #region Properties and Fields
@@ -496,9 +343,7 @@ namespace HoopoePrediction.Model
         [PropertyDescription(Name = "RasterWidth")] public int RasterWidth { get; set; }
         
         [PropertyDescription(Name = "RasterLength")] public int RasterLength { get; set; }
-        
-        [PropertyDescription(Name = "MinRasterSize")] public int MinRasterSize { get; set; }
-        
+
         [PropertyDescription(Name = "Startpoint")] public int Startpoint { get; set; }
         
         [PropertyDescription(Name = "PercentageTiles")] public double PercentageTiles { get; set; }
