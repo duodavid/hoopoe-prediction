@@ -71,11 +71,12 @@ To run the program your system needs the following requirements.
 ## Further Extension
 If you want to add other methods or other extensions make sure to look at the following points.
 - Add new data/layer: When providing a new layer (data source) you have to add it in the model (Program.cs), the config.json and the LandscapeLayer by reference. If you want the
-  create objects in the enironment using the data, make sure to add new lines in the "InitLayer". 
+  create objects in the enironment using the data, make sure to add new lines in the "InitLayer" method. 
 - Changes to data/layer: Be careful when switiching out a dataset, that the size of all the others match it.
 - Add new objects/entities: If you add new objects/entities you need to also add a new entry in the enums in LandscapeLayer and in the "CreateEntity" method.
-- New methods in agent: The system already provides you with some methods that can be used by the agents. If you want to add to add other methods you can
+- New methods in agent: The system already provides you with some methods that can be used by the agents. If you want to add other methods you can
   operations that are provided by [MARS](https://www.mars-group.org/docs/tutorial/development/environments/spatialhashenv) for the specific environment type.
+  To use the method, they have to be in the "Tick" method. (Pay attention to the order of (method) execution within the tick!)
 
 
 ## Visualize
