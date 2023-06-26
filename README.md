@@ -59,18 +59,23 @@ To run the program your system needs the following requirements.
   - Startpoint: The starting point you want the agents at. 
   - RasterWidth: The raster width each agent has.
   - RasterLength: The raster length each agent has.
-  - MinRasterSize: Rasters can not alway be the same size given the file you use. Rasters are allowed to be smaller than what you have set in the previous points.
-                   this one sets the minimim of raster.  Example 7= 7x7 tiles/pixel.
   - PercentageTiles: The least amount of meadow tiles a hoopoe agent has to find for a raster to be recognized as liveable.
   - MinHeigth: The preferred minimum height of a tile.
   - MaxHeight: The preferred maximum height of a tile.
-  - TreeCount: Hoopoes use tree for there nest but it is hard to check each tree condition. TreeCount is the required amount of trees in a given raster to be     considered liveable.
-  - To get numbers of agents you need to check the entire file use these calculations: 
-    - number of agents required: (length of file x width of file) / number of tiles for raster
-    - number of tiles for raster: raster length in meters / 5 (Example: 6000m² / 5m² = 1200) 
-  
+  - TreeCount: Hoopoes use tree for there nest but it is hard to check each tree condition. TreeCount is the required amount of trees in a given raster to be considered liveable.
 
+  
 5. You should be able to run the programm.
+
+
+## Further Extension
+If you want to add other methods or other extensions make sure to look at the following points.
+- Add new data/layer: When providing a new layer (data source) you have to add it in the model (Program.cs), the config.json and the LandscapeLayer by reference. If you want the
+  create objects in the enironment using the data, make sure to add new lines in the "InitLayer". 
+- Changes to data/layer: Be careful when switiching out a dataset, that the size of all the others match it.
+- Add new objects/entities: If you add new objects/entities you need to also add a new entry in the enums in LandscapeLayer and in the "CreateEntity" method.
+- New methods in agent: The system already provides you with some methods that can be used by the agents. If you want to add to add other methods you can
+  operations that are provided by [MARS](https://www.mars-group.org/docs/tutorial/development/environments/spatialhashenv) for the specific environment type.
 
 
 ## Visualize
