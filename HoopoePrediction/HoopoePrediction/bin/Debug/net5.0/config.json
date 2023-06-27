@@ -38,26 +38,26 @@
     },
     {
       "name": "WeatherLayer",
-      "file": "Resources/sh_applicable_1.asc"
+      "file": "Resources/sh_outline_1.asc"
     },
     {
       "name": "LandscapeLayer",
       "mappings": [
         {
           "name": "ResultFilePath",
-          "value": "Resources\\SH_results\\SH_result_1.asc"
+          "value": "Resources/SH_results/SH_result_1.asc"
         },
         {
           "name": "ApplicableSpotsPath",
-          "value": "Resources\\sh_applicableSpots\\sh_applicable_1.asc"
+          "value": "Resources/sh_applicableSpots/sh_applicable_1.asc"
         },
         {
           "name": "ClusterspotsPath",
-          "value": "Resources\\sh_clusterspots\\sh_meadow_1.asc"
+          "value": "Resources/sh_clusterspots/sh_meadow_1.asc"
         },
         {
           "name": "WeatherDataPath",
-          "value": "Resources\\wetter_sh.csv"
+          "value": "Resources/wetter_sh.csv"
         },
         {
           "name": "AgentCount",
@@ -74,10 +74,6 @@
         {
           "name": "RasterLength",
           "value": 46
-        },
-        {
-          "name": "MinRasterSize",
-          "value": 17
         },
         {
           "name": "PercentageTiles",

@@ -62,8 +62,10 @@ namespace HoopoePrediction
                 return;
             }
 
+            var fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\" +
+                                                         filepath));
 
-            string[] arrLine = File.ReadAllLines(filepath);
+            string[] arrLine = File.ReadAllLines(fullPath);
             int maxColumns = arrLine.Length;
             int startIndex = maxColumns; // 511 - 503 + 1 = 7 || 90 - 83 +1 = 6
             int count = 0;

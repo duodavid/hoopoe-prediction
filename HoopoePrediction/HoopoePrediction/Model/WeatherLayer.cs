@@ -39,9 +39,12 @@ namespace HoopoePrediction.Model
 
         public void ReadWeatherData(string path, int days)
         {
-            var fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\" +
-                                                         path));
-            string[] arrLine = File.ReadAllLines(fullPath);
+            
+            string newPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
+            //string newPath = GoUpPathLevel(AppDomain.CurrentDomain.BaseDirectory, 4);
+            newPath = Path.GetFullPath(Path.Combine(newPath , path));
+            
+            string[] arrLine = File.ReadAllLines(newPath);
             var hours = 0;
             var day = 0;
             _temperature = new double[days, hoursPerDay];
@@ -69,6 +72,19 @@ namespace HoopoePrediction.Model
             
         }
 
+        static string GoUpPathLevel(string path, int levels)
+        {
+            string currentPath = path;
         
+            for (int i = 0; i < levels; i++)
+            {
+                currentPath = Directory.GetParent(currentPath)?.FullName;
+            
+                if (currentPath == null)
+                    break;
+            }
+        
+            return currentPath;
+        }
     }
 }

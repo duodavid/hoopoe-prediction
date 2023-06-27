@@ -33,9 +33,7 @@ namespace HoopoePrediction.Model
             UnregisterAgent unregisterAgentHandle)
         {
             base.InitLayer(layerInitData, registerAgentHandle, unregisterAgentHandle);
-
-            var nr = "2.4";
-            var s = double.Parse(nr, System.Globalization.CultureInfo.InvariantCulture);
+            
             Weather.ReadWeatherData(WeatherDataPath, 8);
             var temp = Weather.GetTemperature(0, 3);
             // var agentManager = layerInitData.Container.Resolve<IAgentManager>();
@@ -247,9 +245,16 @@ namespace HoopoePrediction.Model
             {
                 return;
             }
-            var fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\" +
-                                                     filepath));
-            string[] arrLine = File.ReadAllLines(fullPath);
+            
+            // var newPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\" +
+            //                                          filepath));
+            
+            string newPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
+            //string newPath = GoUpPathLevel(AppDomain.CurrentDomain.BaseDirectory, 4);
+            newPath = Path.GetFullPath(Path.Combine(newPath , filepath));
+            
+             
+            string[] arrLine = File.ReadAllLines(newPath);
             int maxColumns = arrLine.Length;
             int startIndex = maxColumns; // 511 - 503 + 1 = 7 || 90 - 83 +1 = 6
             int count = 0;
@@ -300,6 +305,21 @@ namespace HoopoePrediction.Model
             //         //Console.WriteLine("sleep");
             //     }
             // }
+        }
+        
+        static string GoUpPathLevel(string path, int levels)
+        {
+            string currentPath = path;
+        
+            for (int i = 0; i < levels; i++)
+            {
+                currentPath = Directory.GetParent(currentPath)?.FullName;
+            
+                if (currentPath == null)
+                    break;
+            }
+        
+            return currentPath;
         }
         
         #region Properties and Fields
