@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using HoopoePrediction.Items;
 using Mars.Components.Environments;
@@ -245,12 +243,9 @@ namespace HoopoePrediction.Model
             {
                 return;
             }
-            
-            // var newPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\" +
-            //                                          filepath));
-            
-            string newPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
-            //string newPath = GoUpPathLevel(AppDomain.CurrentDomain.BaseDirectory, 4);
+
+            string newPath = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName);
+            // string newPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
             newPath = Path.GetFullPath(Path.Combine(newPath , filepath));
             
              
@@ -292,35 +287,9 @@ namespace HoopoePrediction.Model
             }
 
 
-            // for (int numTries = 0; numTries < 10; numTries++)
-            // {
-            //     try
-            //     {
-            //         File.WriteAllLines(filepath, arrLine);
-            //         //Console.WriteLine("Success");
-            //         break;
-            //     }
-            //     catch (IOException)
-            //     {
-            //         //Console.WriteLine("sleep");
-            //     }
-            // }
         }
         
-        static string GoUpPathLevel(string path, int levels)
-        {
-            string currentPath = path;
-        
-            for (int i = 0; i < levels; i++)
-            {
-                currentPath = Directory.GetParent(currentPath)?.FullName;
-            
-                if (currentPath == null)
-                    break;
-            }
-        
-            return currentPath;
-        }
+
         
         #region Properties and Fields
 
