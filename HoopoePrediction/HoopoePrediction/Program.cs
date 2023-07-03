@@ -27,7 +27,6 @@ namespace HoopoePrediction
             description.AddLayer<StreetLayer>();
             description.AddLayer<TreeLayer>();
             description.AddLayer<TertiaryLayer>();
-            description.AddLayer<ApplicableLayer>();
             description.AddLayer<WeatherLayer>();
             description.AddLayer<LandscapeLayer>();
             
@@ -55,6 +54,7 @@ namespace HoopoePrediction
             Console.WriteLine($"Simulation execution finished after {loopResults.Iterations} steps");
         }
 
+        
         private static void UpdateStats(List<List<Position>> list, String filepath)
         {
             if (list.Count < 1)

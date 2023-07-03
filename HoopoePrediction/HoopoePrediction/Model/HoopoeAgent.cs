@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using HoopoePrediction.Items;
-using Mars.Components.Environments.Cartesian;
 using Mars.Interfaces.Agents;
 using Mars.Interfaces.Annotations;
 using Mars.Interfaces.Environments;
@@ -34,6 +30,7 @@ namespace HoopoePrediction.Model
         [PropertyDescription(Name = "gender")] public string Gender { get; set; }
         [PropertyDescription(Name = "xWidth")] public int XWidth { get; set; }
         [PropertyDescription(Name = "yLength")] public int YLength { get; set; }
+        
         [PropertyDescription(Name = "PercentageTiles")] public double PercentageTiles { get; set; }
         [PropertyDescription(Name = "minHeight")] public int MinHeight { get; set; }
         [PropertyDescription(Name = "maxHeight")] public int MaxHeight { get; set; }
@@ -50,8 +47,6 @@ namespace HoopoePrediction.Model
         private List<Position> home;
         
         private int minFood;
-        //private int currentFood;
-        //private bool exploredRaster;
         
         private int minGrass;
         private bool foodSupply;
@@ -63,51 +58,33 @@ namespace HoopoePrediction.Model
         {
             Layer = layer; // store layer for access within agent class
             Position = Position.CreatePosition(XSpawn,YSpawn);
-            //minFood = 1;
-            //currentFood = 5;
-            //minHeight = 1;
-            //maxHeight = 50;
-            //exploredRaster = false;
+
             
-            minGrass = (int) (YLength*XWidth*PercentageTiles); // je Block ca 50qm 
-            foodspots = new List<Position>();
-            streettiles = new List<Position>();
-            home = new List<Position>();
-            foodSupply = false;
-            updated = false;
+            // minGrass = (int) (YLength*XWidth*PercentageTiles); // je Block ca 50qm 
+            // foodspots = new List<Position>();
+            // streettiles = new List<Position>();
+            // home = new List<Position>();
+            // foodSupply = false;
+            // updated = false;
         }
 
     
 
         public void Tick()
         {
-            //do something in every tick of the simulation
-            //Console.WriteLine("Tick: " + Layer.GetCurrentTick());
-            //Console.WriteLine("Agent " + this.ID + " says: Hello, World");
-            
-            LookForFoodTiles();
-            LookForTrees();
-            LookOutForStreetTiles();
-            Move();
-
-            //var t= Layer.GetCurrentTick();
 
             
-            
-            //ToDo: tree Amount
-            if (Math.Abs(Position.Y - (YSpawn+YLength-1)) == 0 && Math.Abs(Position.X - (XSpawn+XWidth-1)) ==0 ) 
-            {
-                if (foodspots.Count >= minGrass && foodspots.Count> streettiles.Count && !updated && home.Count>=TreeCount)
-                {
-                    Console.WriteLine("Enough food Supply for" + " Hoopoe " + MemberId+" "+ foodspots.Count);
-                    updated = true;
-                    Layer.Results.Add(foodspots);
-                    Layer.SuccessRate++;
-                    //updateStats();
+            // LookForFoodTiles();
+            // LookForTrees();
+            // LookOutForStreetTiles();
+            // Move();
+            // CheckTerritory();
 
-                }
-            }
+
         }
+
+
+        
 
         /**
         * Check for the elevation level of the given position
@@ -147,16 +124,12 @@ namespace HoopoePrediction.Model
                foreach (var pos in foodspots)
                {
                    var contains = foodspots.Contains(spot.Position);
-                   // if (spot.Position.Equals(pos))
-                   // {
-                   //     fill = false;
-                   // }
+
                    if (!contains)
                    {
                        foodspots.Add(Position.CreatePosition(spot.Position.X, spot.Position.Y));
                        break;
                    }
-                   //fill = true;
                }
            }
         }
@@ -185,16 +158,12 @@ namespace HoopoePrediction.Model
                 foreach (var pos in streettiles)
                 {
                     var contains = streettiles.Contains(spot.Position);
-                    // if (spot.Position.Equals(pos))
-                    // {
-                    //     fill = false;
-                    // }
+
                     if (!contains)
                     {
                         streettiles.Add(Position.CreatePosition(spot.Position.X, spot.Position.Y));
                         break;
                     }
-                    //fill = true;
                 }
             }
 
@@ -218,10 +187,6 @@ namespace HoopoePrediction.Model
         */
         private void Move()
         {
-            // if (Math.Abs(Position.Y - Layer.Fence.Height) < 1 && Math.Abs(Position.X - Layer.Fence.Width) < 1)
-            // {
-            //     //Do nothing
-            // }
             if (Position.X+1<XSpawn+XWidth && IsWithinFence(Position))
             {
                 Layer.Environment.MoveTo(this, Position.CreatePosition(Position.X+1,Position.Y), 1);

@@ -53,7 +53,7 @@
         },
         {
           "name": "ClusterspotsPath",
-          "value": "Resources/sh_clusterspots/sh_meadow_1.asc"
+          "value": "Resources/sh_clusterspots/sh_me_1.asc"
         },
         {
           "name": "WeatherDataPath",

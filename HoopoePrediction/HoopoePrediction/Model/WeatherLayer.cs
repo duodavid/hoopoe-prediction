@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Mars.Components.Layers;
-using Mars.Interfaces.Environments;
 
 namespace HoopoePrediction.Model
 {

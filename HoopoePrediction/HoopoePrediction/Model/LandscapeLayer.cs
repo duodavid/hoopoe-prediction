@@ -5,12 +5,9 @@ using System.Text;
 using HoopoePrediction.Items;
 using Mars.Components.Environments;
 using Mars.Components.Layers;
-using Mars.Core.Data;
 using Mars.Interfaces.Annotations;
 using Mars.Interfaces.Data;
-using Mars.Interfaces.Environments;
 using Mars.Interfaces.Layers;
-using NetTopologySuite.Geometries;
 using Position = Mars.Interfaces.Environments.Position;
 
 namespace HoopoePrediction.Model
@@ -43,12 +40,13 @@ namespace HoopoePrediction.Model
             Rasterspots = new List<Position>();
             MinAmountSpots = RasterLength * RasterWidth * PercentageTiles;
             SelectApplicable();
-            PrintSpots(ApplicableSpots, ApplicableSpotsPath);
+            LogPositions(ApplicableSpots, ApplicableSpotsPath);
             var spawnpoints = Cluster();
             Console.WriteLine("Potential Habitats " +spawnpoints.Count);
-            PrintSpots(Rasterspots,ClusterspotsPath);
+            LogPositions(Rasterspots,ClusterspotsPath);
             
 
+            //spawn agents
             for (int i = Startpoint; i < spawnpoints.Count; i++)
             {
                 var spawn = Rasterspots[i];
@@ -60,14 +58,11 @@ namespace HoopoePrediction.Model
                 agent.YLength = RasterLength;
                 agent.MinHeight = MinHeight;
                 agent.MaxHeight = MaxHeight;
-                agent.PercentageTiles = PercentageTiles;
                 agent.Init(layer);
                 registerAgentHandle.Invoke(layer,agent);
                 Hoopoes.Add(agent);
             }
-            
-            Results = new List<List<Position>>();
-            
+            //create entities
             for (var x = 0; x < Fence.Width; x++)
             for (var y = 0; y < Fence.Height; y++)
             {
@@ -81,10 +76,17 @@ namespace HoopoePrediction.Model
                 enable = Tertiary[x, y];
                 CreateEntity(enable, position, LandscapeType.Street);
             }
-
+            
+            Results = new List<List<Position>>();
             return Hoopoes.Count > 0;
         }
 
+        /// <summary>
+        /// Creates an entity of a given type at given position
+        /// </summary>
+        /// <param name="enable"></param>
+        /// <param name="position"></param>
+        /// <param name="type"></param>
         private void CreateEntity(double enable, Position position, LandscapeType type)
         {
             if (enable == 0)
@@ -117,7 +119,9 @@ namespace HoopoePrediction.Model
             }
         }
         
-        
+        /// <summary>
+        /// Selects all applicablespots for a territory
+        /// </summary>
         private void SelectApplicable()
         {
             var height = Fence.Height ;
@@ -127,21 +131,39 @@ namespace HoopoePrediction.Model
                 for (int j = 0; j < width; j++)
                 {
                     var pos = Position.CreatePosition(j, i);
-                    if (checkElevation(pos))
+                    if (CheckIfApplicable(pos))
                     {
-                        if (Meadow.GetValue(pos)==0)
-                        {
-                            if (Street.GetValue(pos) != 0 && Tertiary.GetValue(pos)!=0)
-                            {
-                                ApplicableSpots.Add(pos);
-                            }
-                        }
+                        ApplicableSpots.Add(pos);
                     }
+                    
                 }
             }
         }
-        
 
+        /// <summary>
+        /// Checks if a position is considered an applicablespot
+        /// </summary>
+        /// <param name="pos"></param>
+        private bool CheckIfApplicable(Position pos)
+        {
+            if (checkElevation(pos))
+            {
+                if (Meadow.GetValue(pos)==0)
+                {
+                    if (Street.GetValue(pos) != 0 && Tertiary.GetValue(pos)!=0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Clusters applicablespots and creates territories aswell as spawnpoints for the agents
+        /// </summary>
+        /// <returns>List of spawnpoints for hoopoeagents</returns>
         private List<Position> Cluster()
         {  var rasterStartpointX = 0;
             var rasterStartpointY = 0;
@@ -167,7 +189,8 @@ namespace HoopoePrediction.Model
                             var pos = Position.CreatePosition(j, i);
                             if (j < Fence.Width)
                             {
-                                if (Math.Abs(Applicable.GetValue(pos) - 7) < 1 && !usedPositions.Contains(pos))
+                                // Math.Abs(Applicable.GetValue(pos) - 7) < 1
+                                if (CheckIfApplicable(pos) && !usedPositions.Contains(pos))
                                 {
                                     tempList.Add(pos);
                                 }
@@ -226,7 +249,11 @@ namespace HoopoePrediction.Model
             return startpoints;
         }
 
-
+        /// <summary>
+        /// Checks if a position is within the min and max height
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns>true if it is within min and max height</returns>
         private bool checkElevation(Position pos)
         {
             var currentHeight = Elevation.GetHeight(pos);
@@ -237,7 +264,14 @@ namespace HoopoePrediction.Model
             return false;
         }
         
-        private static void PrintSpots(List<Position> list, String filepath)
+        /// <summary>
+        /// Logs the positions of the list in the file of given path
+        /// by changing the number at position
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="filepath"></param>
+        /// <returns>true if it is within min and max height</returns>
+        private static void LogPositions(List<Position> list, String filepath)
         {
             if (list.Count < 1)
             {
@@ -245,16 +279,17 @@ namespace HoopoePrediction.Model
             }
 
             string newPath = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName);
-            // string newPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
             newPath = Path.GetFullPath(Path.Combine(newPath , filepath));
             
              
             string[] arrLine = File.ReadAllLines(newPath);
             int maxColumns = arrLine.Length;
-            int startIndex = maxColumns; // 511 - 503 + 1 = 7 || 90 - 83 +1 = 6
+            int startIndex = maxColumns; 
             int count = 0;
             int spotsIdx = 0;
-
+            var replacingValueCharacter = '7';
+            var valueCharacter = '0';
+            var nonValueCharacter = '1';
 
             //90 -82 -= 7 || 90 -0 = 90 -1idx =  89
             foreach (var spot in list)
@@ -264,12 +299,12 @@ namespace HoopoePrediction.Model
                 var arr = new StringBuilder(line);
                 for (int i = 0; i < arr.Length; i++)
                 {
-                    if (arr[i] == '0')
+                    if (arr[i] == valueCharacter)
                     {
-                        arr[i] = '1';
+                        arr[i] = nonValueCharacter;
                         ++count;
                     }
-                    else if (arr[i] == '1' || arr[i] == '7')
+                    else if (arr[i] == nonValueCharacter || arr[i] == replacingValueCharacter)
                     {
                         ++count;
                     }
@@ -277,7 +312,7 @@ namespace HoopoePrediction.Model
                     { 
                         // val pos = next value | if no value left -> break;
                         // //pos.X = -1;
-                        arr[i] = '7';
+                        arr[i] = replacingValueCharacter;
                         count = 0;
                         break;
                     }
@@ -286,6 +321,19 @@ namespace HoopoePrediction.Model
                 startIndex = maxColumns;
             }
 
+            for (int numTries = 0; numTries < 10; numTries++)
+            {
+                try
+                {
+                    File.WriteAllLines(newPath, arrLine);
+                    //Console.WriteLine("Success");
+                    break;
+                }
+                catch (IOException)
+                {
+                    //Console.WriteLine("sleep");
+                }
+            }
 
         }
         
@@ -313,9 +361,6 @@ namespace HoopoePrediction.Model
         [PropertyDescription(Name = "TertiaryLayer")]
         public TertiaryLayer Tertiary { get; set; }
         
-        [PropertyDescription(Name = "ApplicableLayer")]
-        public ApplicableLayer Applicable { get; set; }
-        
         [PropertyDescription(Name = "WeatherLayer")]
         public WeatherLayer Weather { get; set; }
         
@@ -326,9 +371,7 @@ namespace HoopoePrediction.Model
         [PropertyDescription(Name = "ClusterspotsPath")] public String ClusterspotsPath { get; set; }
 
         [PropertyDescription(Name = "WeatherDataPath")] public String WeatherDataPath { get; set; }
-        
-        [PropertyDescription(Name = "AgentCount")] public int AgentCount { get; set; }
-        
+
         [PropertyDescription(Name = "RasterWidth")] public int RasterWidth { get; set; }
         
         [PropertyDescription(Name = "RasterLength")] public int RasterLength { get; set; }

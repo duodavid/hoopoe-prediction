@@ -33,10 +33,6 @@
       "file": "Resources/sh_outline_1.asc"
     },
     {
-      "name": "ApplicableLayer",
-      "file": "Resources/sh_applicable_1.asc"
-    },
-    {
       "name": "WeatherLayer",
       "file": "Resources/sh_outline_1.asc"
     },
@@ -53,7 +49,7 @@
         },
         {
           "name": "ClusterspotsPath",
-          "value": "Resources/sh_clusterspots/sh_meadow_1.asc"
+          "value": "Resources/sh_clusterspots/sh_cluster_1.asc"
         },
         {
           "name": "WeatherDataPath",
