@@ -10,6 +10,9 @@ Multi-agent system based programm for predicting hoopoe distribution in north ge
 1. [Simulation](#simulation)
 2. [Software Stack](#software-Stack)
 3. [How to setup?](#howtosetup)
+4. [Further Extension](#furtherextension)
+5. [Geographical data](#geographicaldata)
+6. [Visualization](#visualization)
 
 ## Run
 The progam uses agents (hoopoes) to scout the environment. The environment is based on the data in the layers that are referencing the reallife environemnt.
@@ -64,7 +67,6 @@ To run the program your system needs the following requirements.
   - MaxHeight: The preferred maximum height of a tile.
   - TreeCount: Hoopoes use tree for there nest but it is hard to check each tree condition. TreeCount is the required amount of trees in a given raster to be considered liveable.
 
-  
 5. You should be able to run the programm.
 
 
@@ -78,8 +80,12 @@ If you want to add other methods or other extensions make sure to look at the fo
   operations that are provided by [MARS](https://www.mars-group.org/docs/tutorial/development/environments/spatialhashenv) for the specific environment type.
   To use the method, they have to be in the "Tick" method. (Pay attention to the order of (method) execution within the tick!)
 
+## Geographical data
+Geographical data can be obtained by using the plugin [QuickOsm](https://plugins.qgis.org/plugins/QuickOSM/) in QGIS. (For data about the elevation the plugin [SRTM-Downloader](https://plugins.qgis.org/plugins/SRTM-Downloader/))
+- All you need you need is to select the type of dataset of a specific region, you want to use. The plugin uses a key and value system, that can be looked up at [QuickOsmWiki](https://wiki.openstreetmap.org/wiki/DE:Map_Features#Flughafen). For example #aeroway as the key, #aerodrome as the value and #schleswig-holstein as the region. 
+- The value of the geographical data that was used are the following: (highway) primary, (highway) secondary, (highway) motoway, (highway) tertiary, (natural) wood, (landuse) meadow.
 
-## Visualize
+## Visualization
 The programm is created in close dependency using [QGIS](https://www.qgis.org/de/site/). So to visualize everything you have to download the programm, create a new project and drag the "OpenStreetMap" layer on the left side
 to your workbench, to display the world map. To visualize the data that are used in the program, drag the files to qgis. 
 
